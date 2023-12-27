@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
     res.status(200).send("Welcome to product management API!");
 })
 
-app.use("/auth/login", authRoutes)
+app.use("/auth", authRoutes)
 app.use("/products", productRoutes)
 
 const PORT = process.env.PORT || 4001
