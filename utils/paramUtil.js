@@ -43,8 +43,7 @@ module.exports = class InParamUtil {
 
         var pList = new Array();
         Object.keys(data).forEach(key => {
-            console.log('name : ' + key + ', value : ' + data[key]);
-
+            // console.log('name : ' + key + ', value : ' + data[key]);
             var param = new InParam(key, data[key]);
             pList.push(param);
         });
