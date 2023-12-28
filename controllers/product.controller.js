@@ -1,8 +1,9 @@
+const router = require('express').Router();
 const dbService = require("../services/dbService");
 const paramUtil = require("../utils/paramUtil");
-const router = require('express').Router();
+const { verifyToken } = require("../services/authService");
 
-router.get("/all", async (req, res) => {
+router.get("/all", verifyToken, async (req, res) => {
     try {
         dbService.common_db_call("usp_list_product", [], (err, result) => {
             if (err) {
@@ -18,7 +19,7 @@ router.get("/all", async (req, res) => {
     }
 });
 
-router.post("/new", async (req, res) => {
+router.post("/new", verifyToken, async (req, res) => {
     try {
         let pList = paramUtil.Parse(req.body);
 
@@ -35,7 +36,7 @@ router.post("/new", async (req, res) => {
     }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
     try {
         let pList = paramUtil.Parse({
             "in@p_id": req.params.id
@@ -53,7 +54,7 @@ router.get("/:id", async (req, res) => {
     }
 })
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
     try {
         let pList = paramUtil.Parse({
             "in@p_id": req.params.id,
@@ -71,7 +72,7 @@ router.put("/:id", async (req, res) => {
     }
 })
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
     try {
         let pList = paramUtil.Parse({
             "in@p_id": req.params.id

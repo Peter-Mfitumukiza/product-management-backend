@@ -1,28 +1,9 @@
-const dbService = require("../services/dbService");
-const paramUtil = require("../utils/paramUtil");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const router = require('express').Router();
-
-async function getUserByEmail(email) {
-    return new Promise((resolve, reject) => {
-        try {
-            let pList = paramUtil.Parse({
-                "in@p_email": email
-            });
-
-            dbService.common_db_call("usp_get_user_by_email", pList, (err, result) => {
-                if (err) {
-                    console.log("data service error: " + err.message);
-                    resolve(null); // Resolve with null in case of an error
-                }
-                resolve(result); // Resolve with the result
-            });
-        } catch (error) {
-            reject(error); // Reject with the error
-        }
-    });
-}
+const dbService = require("../services/dbService");
+const paramUtil = require("../utils/paramUtil");
+const { getUserByEmail } = require("../services/authService");
 
 router.post("/register", async (req, res) => {
     try {
@@ -62,7 +43,7 @@ router.post("/login", async (req, res) => {
 
         const samePass = await bcrypt.compare(password, user.password);
         if (samePass) {
-            const token = jwt.sign({ userid: user.userid }, process.env.SECRET);
+            const token = jwt.sign({ email: user.email }, process.env.SECRET);
             return res.json({ message: "Login successful!", token });
         } else {
             return res.status(400).json({ error: "Wrong Password!" });
